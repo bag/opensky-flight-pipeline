@@ -15,19 +15,10 @@ from pyspark.sql.functions import current_timestamp, input_file_name, col
 
 # COMMAND ----------
 
-# Configuration
-STORAGE_ACCOUNT = "openskylandingzone"
-CONTAINER = "opensky-landing"
-
-LANDING_ZONE = f"abfss://{CONTAINER}@{STORAGE_ACCOUNT}.dfs.core.windows.net/raw"
-CHECKPOINT_PATH = f"abfss://{CONTAINER}@{STORAGE_ACCOUNT}.dfs.core.windows.net/checkpoints/bronze"
+LANDING_ZONE = "/Volumes/flight_tracking/bronze/landing_zone/raw"
+CHECKPOINT_PATH = "/Volumes/flight_tracking/bronze/landing_zone/checkpoints"
 BRONZE_TABLE = "flight_tracking.bronze.opensky_states_streaming"
 
-# Authenticate using the secret from Key Vault
-spark.conf.set(
-    f"fs.azure.account.key.{STORAGE_ACCOUNT}.dfs.core.windows.net",
-    dbutils.secrets.get(scope="opensky", key="storage-key")
-)
 
 # COMMAND ----------
 
