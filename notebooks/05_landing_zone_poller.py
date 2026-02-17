@@ -5,23 +5,20 @@
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC CREATE VOLUME IF NOT EXISTS flight_tracking.bronze.landing_zone;
+
+# COMMAND ----------
+
+# Databricks notebook source
 import requests
 import json
 from datetime import datetime
 
-# COMMAND ----------
+LANDING_ZONE = "/Volumes/flight_tracking/bronze/landing_zone/raw"
 
-STORAGE_ACCOUNT = "openskylandingzone"
-CONTAINER = "opensky-landing"
-LANDING_ZONE = f"abfss://{CONTAINER}@{STORAGE_ACCOUNT}.dfs.core.windows.net/raw"
-
-storage_key = dbutils.secrets.get(scope="opensky", key="storage-key")
-spark.conf.set(
-    f"fs.azure.account.key.{STORAGE_ACCOUNT}.dfs.core.windows.net",
-    storage_key
-)
-
-# COMMAND ----------
+# Create raw folder if needed
+dbutils.fs.mkdirs(LANDING_ZONE)
 
 def fetch_and_write():
     resp = requests.get("https://opensky-network.org/api/states/all")
@@ -32,10 +29,8 @@ def fetch_and_write():
     path = f"{LANDING_ZONE}/opensky_{timestamp}.json"
     
     dbutils.fs.put(path, json.dumps(data), overwrite=True)
-    
     return path, len(data.get("states", []))
-
-# COMMAND ----------
 
 path, count = fetch_and_write()
 print(f"Wrote {count} records to {path}")
+
