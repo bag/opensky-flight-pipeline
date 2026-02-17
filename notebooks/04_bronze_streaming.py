@@ -6,7 +6,7 @@
 # COMMAND ----------
 
 from pyspark.sql.types import *
-from pyspark.sql.functions import current_timestamp, input_file_name, col
+from pyspark.sql.functions import current_timestamp, col
 
 # COMMAND ----------
 
@@ -22,32 +22,31 @@ BRONZE_TABLE = "flight_tracking.bronze.opensky_states_streaming"
 
 # COMMAND ----------
 
-state_schema = ArrayType(
-    StructType([
-        StructField("icao24", StringType()),
-        StructField("callsign", StringType()),
-        StructField("origin_country", StringType()),
-        StructField("time_position", LongType()),
-        StructField("last_contact", LongType()),
-        StructField("longitude", DoubleType()),
-        StructField("latitude", DoubleType()),
-        StructField("baro_altitude", DoubleType()),
-        StructField("on_ground", BooleanType()),
-        StructField("velocity", DoubleType()),
-        StructField("true_track", DoubleType()),
-        StructField("vertical_rate", DoubleType()),
-        StructField("sensors", StringType()),
-        StructField("geo_altitude", DoubleType()),
-        StructField("squawk", StringType()),
-        StructField("spi", BooleanType()),
-        StructField("position_source", IntegerType())
-    ])
-)
+state_schema = StructType([
+    StructField("icao24", StringType()),
+    StructField("callsign", StringType()),
+    StructField("origin_country", StringType()),
+    StructField("time_position", LongType()),
+    StructField("last_contact", LongType()),
+    StructField("longitude", DoubleType()),
+    StructField("latitude", DoubleType()),
+    StructField("baro_altitude", DoubleType()),
+    StructField("on_ground", BooleanType()),
+    StructField("velocity", DoubleType()),
+    StructField("true_track", DoubleType()),
+    StructField("vertical_rate", DoubleType()),
+    StructField("sensors", StringType()),
+    StructField("geo_altitude", DoubleType()),
+    StructField("squawk", StringType()),
+    StructField("spi", BooleanType()),
+    StructField("position_source", IntegerType())
+])
 
 json_schema = StructType([
     StructField("time", LongType()),
-    StructField("states", state_schema)
+    StructField("states", ArrayType(state_schema))
 ])
+
 
 # COMMAND ----------
 
@@ -74,28 +73,28 @@ exploded = (
     .select(
         col("time").alias("_source_timestamp"),
         explode(col("states")).alias("state"),
-        input_file_name().alias("_source_file")
+        col("_metadata.file_path").alias("_source_file")
     )
     .select(
         col("_source_timestamp"),
         col("_source_file"),
-        col("state")[0].alias("icao24"),
-        col("state")[1].alias("callsign"),
-        col("state")[2].alias("origin_country"),
-        col("state")[3].cast("long").alias("time_position"),
-        col("state")[4].cast("long").alias("last_contact"),
-        col("state")[5].cast("double").alias("longitude"),
-        col("state")[6].cast("double").alias("latitude"),
-        col("state")[7].cast("double").alias("baro_altitude"),
-        col("state")[8].cast("boolean").alias("on_ground"),
-        col("state")[9].cast("double").alias("velocity"),
-        col("state")[10].cast("double").alias("true_track"),
-        col("state")[11].cast("double").alias("vertical_rate"),
-        col("state")[12].alias("sensors"),
-        col("state")[13].cast("double").alias("geo_altitude"),
-        col("state")[14].alias("squawk"),
-        col("state")[15].cast("boolean").alias("spi"),
-        col("state")[16].cast("int").alias("position_source")
+        col("state.icao24").alias("icao24"),
+        col("state.callsign").alias("callsign"),
+        col("state.origin_country").alias("origin_country"),
+        col("state.time_position").alias("time_position"),
+        col("state.last_contact").alias("last_contact"),
+        col("state.longitude").alias("longitude"),
+        col("state.latitude").alias("latitude"),
+        col("state.baro_altitude").alias("baro_altitude"),
+        col("state.on_ground").alias("on_ground"),
+        col("state.velocity").alias("velocity"),
+        col("state.true_track").alias("true_track"),
+        col("state.vertical_rate").alias("vertical_rate"),
+        col("state.sensors").alias("sensors"),
+        col("state.geo_altitude").alias("geo_altitude"),
+        col("state.squawk").alias("squawk"),
+        col("state.spi").alias("spi"),
+        col("state.position_source").alias("position_source")
     )
     .withColumn("_ingested_at", current_timestamp())
 )
