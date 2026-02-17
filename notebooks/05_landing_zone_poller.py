@@ -15,9 +15,10 @@ STORAGE_ACCOUNT = "openskylandingzone"
 CONTAINER = "opensky-landing"
 LANDING_ZONE = f"abfss://{CONTAINER}@{STORAGE_ACCOUNT}.dfs.core.windows.net/raw"
 
+storage_key = dbutils.secrets.get(scope="opensky", key="storage-key")
 spark.conf.set(
     f"fs.azure.account.key.{STORAGE_ACCOUNT}.dfs.core.windows.net",
-    dbutils.secrets.get(scope="opensky", key="storage-key")
+    storage_key
 )
 
 # COMMAND ----------
