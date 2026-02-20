@@ -1,3 +1,5 @@
+![Deploy Status](https://github.com/bag/opensky-flight-pipeline/actions/workflows/deploy.yml/badge.svg)
+
 # OpenSky Flight Tracking Pipeline
 
 Real-time flight tracking data pipeline built on Azure Databricks.
