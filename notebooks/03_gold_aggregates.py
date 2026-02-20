@@ -73,7 +73,7 @@ altitude_distribution.write \
 
 # COMMAND ----------
 
-from pyspark.sql.functions import hour, to_timestamp
+from pyspark.sql.functions import hour, when, to_timestamp
 
 hourly_traffic = silver_df.filter(col("_has_position")) \
     .withColumn("hour", hour(to_timestamp(col("_source_timestamp")))) \
