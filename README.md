@@ -76,4 +76,5 @@ Required secrets:
 
 ## License
 
-MIT
+This project is provided for educational and demonstration purposes only.
+All rights reserved.
