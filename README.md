@@ -64,7 +64,7 @@ databricks bundle deploy --target prod
 
 ### CI/CD
 
-Push to `main` triggers GitHub Actions deployment.
+Push to `master` triggers GitHub Actions deployment.
 
 Required secrets:
 - `DATABRICKS_HOST`
