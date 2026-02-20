@@ -35,7 +35,7 @@ resources:
             notebook_path: ./notebooks/03_gold_aggregates.py
             source: WORKSPACE
 
-streaming_etl:
+    streaming_etl:
       name: "OpenSky Streaming ETL"
       schedule:
         quartz_cron_expression: "0 */10 * * * ?"
@@ -66,6 +66,7 @@ streaming_etl:
           notebook_task:
             notebook_path: ./notebooks/03_gold_aggregates.py
             source: WORKSPACE
+
 targets:
   dev:
     mode: development
