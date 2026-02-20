@@ -20,15 +20,6 @@ resources:
           notebook_task:
             notebook_path: ./notebooks/01_bronze_ingestion.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              "spark.databricks.cluster.profile": "singleNode"
-              "spark.master": "local[*]"
-            custom_tags:
-              "ResourceClass": "SingleNode"
 
         - task_key: silver_transform
           depends_on:
@@ -36,15 +27,6 @@ resources:
           notebook_task:
             notebook_path: ./notebooks/02_silver_transform.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              "spark.databricks.cluster.profile": "singleNode"
-              "spark.master": "local[*]"
-            custom_tags:
-              "ResourceClass": "SingleNode"
 
         - task_key: gold_aggregates
           depends_on:
@@ -52,15 +34,6 @@ resources:
           notebook_task:
             notebook_path: ./notebooks/03_gold_aggregates.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              "spark.databricks.cluster.profile": "singleNode"
-              "spark.master": "local[*]"
-            custom_tags:
-              "ResourceClass": "SingleNode"
 
     streaming_etl:
       name: "OpenSky Streaming ETL"
@@ -72,15 +45,6 @@ resources:
           notebook_task:
             notebook_path: ./notebooks/05_landing_zone_poller.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              "spark.databricks.cluster.profile": "singleNode"
-              "spark.master": "local[*]"
-            custom_tags:
-              "ResourceClass": "SingleNode"
 
         - task_key: bronze_streaming
           depends_on:
@@ -88,15 +52,6 @@ resources:
           notebook_task:
             notebook_path: ./notebooks/04_bronze_streaming.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              "spark.databricks.cluster.profile": "singleNode"
-              "spark.master": "local[*]"
-            custom_tags:
-              "ResourceClass": "SingleNode"
 
 targets:
   dev:
