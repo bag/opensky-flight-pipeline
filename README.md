@@ -8,7 +8,7 @@ Real-time flight tracking data pipeline built on Azure Databricks.
 
 ## Architecture
 ```
-OpenSky API → Landing Zone → Auto Loader → Bronze → Silver → Gold → Dashboard
+OpenSky API -> Landing Zone -> Auto Loader -> Bronze -> Silver -> Gold -> Dashboard
 ```
 
 **Stack:** Azure Databricks, Delta Lake, Unity Catalog, Structured Streaming
@@ -27,7 +27,7 @@ OpenSky API → Landing Zone → Auto Loader → Bronze → Silver → Gold → 
 ## Features
 
 - **Batch + Streaming** ingestion patterns
-- **Medallion architecture**: Bronze → Silver → Gold
+- **Medallion architecture**: Bronze -> Silver -> Gold
 - **Data quality**: Null checks, deduplication, derived fields
 - **Geospatial**: Live aircraft position mapping
 - **Infrastructure as code**: Databricks Asset Bundles
@@ -42,7 +42,7 @@ CREATE SCHEMA IF NOT EXISTS flight_tracking.gold;
 CREATE VOLUME IF NOT EXISTS flight_tracking.bronze.landing_zone;
 ```
 
-Run notebooks in order: `01` → `02` → `03`
+Run notebooks in order: `01` -> `02` -> `03`
 
 ## Deployment
 
@@ -66,13 +66,16 @@ databricks bundle deploy --target prod
 
 Push to `master` triggers GitHub Actions deployment.
 
-Required secrets:
-- `DATABRICKS_HOST`
-- `DATABRICKS_TOKEN`
+**Setup:**
+1. Go to your GitHub repo -> **Settings** -> **Secrets and variables** -> **Actions**
+2. Click **New repository secret**
+3. Add these secrets:
+   - `DATABRICKS_HOST`: Your workspace URL (e.g., `https://adb-xxxxx.azuredatabricks.net`)
+   - `DATABRICKS_TOKEN`: Generate at Databricks -> User Settings -> Developer -> Access tokens
 
 ## Data Source
 
-[OpenSky Network API](https://opensky-network.org/apidoc/) — crowdsourced ADS-B flight tracking.
+[OpenSky Network API](https://opensky-network.org/apidoc/) -- crowdsourced ADS-B flight tracking.
 
 ## License
 
