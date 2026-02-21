@@ -12,7 +12,7 @@ from pyspark.sql.functions import current_timestamp, lit
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE CATALOG IF NOT EXISTS flight_tracking;
+# MAGIC USE CATALOG flight_tracking;
 # MAGIC CREATE SCHEMA IF NOT EXISTS flight_tracking.bronze;
 
 # COMMAND ----------
